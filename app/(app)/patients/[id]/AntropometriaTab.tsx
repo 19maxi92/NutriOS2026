@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import AnthropometryForm from "./AnthropometryForm";
+import IsakBodyDiagram from "./IsakBodyDiagram";
 
 export default function AntropometriaTab({
   patientId,
@@ -28,6 +29,8 @@ export default function AntropometriaTab({
 
   return (
     <div>
+      <IsakBodyDiagram />
+
       <div className="card" style={{ marginBottom: 16 }}>
         <AnthropometryForm
           patientId={patientId}
