@@ -41,3 +41,21 @@ create policy "food_nutrients: authenticated read" on public.food_nutrients for 
 create policy "food_sources: authenticated read" on public.food_sources for select using (auth.role() = 'authenticated');
 create policy "nutrients: authenticated read" on public.nutrients for select using (auth.role() = 'authenticated');
 create policy "household_measures: authenticated read" on public.household_measures for select using (auth.role() = 'authenticated');
+
+-- ---------- permitir que un admin gestione el rol de cualquier perfil ----------
+-- (antes, "profiles: self update" solo dejaba a cada usuario editar su propio perfil;
+-- la pantalla de Configuración necesita que un admin pueda cambiar el rol de otros)
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'admin'
+  );
+$$;
+
+create policy "profiles: admin update any" on public.profiles
+  for update using (public.is_admin());

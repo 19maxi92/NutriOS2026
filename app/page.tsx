@@ -4,9 +4,13 @@ const MODULES = [
   ["Pacientes", "Ficha única por paciente, hub de todo lo clínico y administrativo."],
   ["Historia clínica", "Timeline cronológico y foliado. Nunca se sobrescribe (Ley 26.529)."],
   ["Antropometría", "Protocolo ISAK, cálculos citados (fórmula, autor, fuente)."],
-  ["Plan alimentario", "Constructor visual contra SARA 2 / USDA / LATINFOODS, con macros en vivo."],
-  ["Laboratorios y bioimpedancia", "Carga de valores con trazabilidad y separación dato/interpretación."],
+  ["Bioimpedancia y DEXA", "Datos separados por equipo, sin mezclar dato crudo con interpretación."],
+  ["Laboratorios", "Carga de valores con unidad, rango de referencia y trazabilidad."],
+  ["Plan alimentario", "Constructor semanal contra SARA 2 / USDA / LATINFOODS, con macros en vivo."],
+  ["Recetas y sustituciones", "Platos reutilizables y comparador de alimentos lado a lado."],
   ["Agenda", "Turnos por tipo, modalidad y estado."],
+  ["Asistente IA", "Extrae y ordena datos — nunca diagnostica ni prescribe. (en construcción)"],
+  ["Portal del paciente", "PWA para ver plan, turnos y evolución. (en construcción)"],
 ];
 
 export default function LandingPage() {

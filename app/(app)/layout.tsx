@@ -28,18 +28,41 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           borderBottom: "1px solid var(--border)",
         }}
       >
-        <strong>Consultorio Nutricional</strong>
+        <Link href="/dashboard" style={{ color: "var(--text)" }}>
+          <strong>Consultorio Nutricional</strong>
+        </Link>
         <span style={{ fontSize: 13, color: "var(--text-muted)" }}>
           {profile?.full_name ?? user.email} · {profile?.role ?? "usuario"}
         </span>
       </div>
       <div style={{ display: "flex", gap: 20 }}>
-        <nav style={{ width: 160, flexShrink: 0 }}>
+        <nav style={{ width: 168, flexShrink: 0 }}>
           <NavLink href="/dashboard" label="Dashboard" />
           <NavLink href="/patients" label="Pacientes" />
           <NavLink href="/appointments" label="Agenda" />
           <NavLink href="/foods" label="Alimentos" />
           <NavLink href="/audit" label="Auditoría" />
+          <NavLink href="/settings" label="Configuración" />
+
+          <p
+            style={{
+              fontSize: 11,
+              color: "var(--text-muted)",
+              textTransform: "uppercase",
+              letterSpacing: 0.4,
+              margin: "16px 0 4px 10px",
+            }}
+          >
+            En construcción
+          </p>
+          <NavLink href="/ai-assistant" label="Asistente IA" />
+          <NavLink href="/photos" label="Análisis de fotos" />
+          <NavLink href="/templates" label="Plantillas" />
+          <NavLink href="/reports" label="Informes" />
+          <NavLink href="/patient-portal" label="Portal paciente" />
+          <NavLink href="/events" label="Eventos" />
+          <NavLink href="/messages" label="Comunicación" />
+          <NavLink href="/security" label="Seguridad avanzada" />
         </nav>
         <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
       </div>
