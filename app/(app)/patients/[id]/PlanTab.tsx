@@ -11,8 +11,7 @@ const MEAL_LABELS: Record<string, string> = {
   cena: "Cena",
 };
 
-export default function PlanTab({ patientId }: { patientId: string }) {
-  const supabase = createClient();
+export default function PlanTab({ patientId }: { patientId: string }) {  const supabase = createClient();
   const [loading, setLoading] = useState(true);
   const [planId, setPlanId] = useState<string | null>(null);
   const [meals, setMeals] = useState<{ id: string; meal_type: string }[]>([]);
@@ -168,10 +167,15 @@ export default function PlanTab({ patientId }: { patientId: string }) {
 
   return (
     <div>
-      <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 14 }}>
-        Cada alimento indica su fuente (SARA 2 / USDA / LATINFOODS). Día de referencia — en el MVP
-        completo se repite por cada día de la semana.
-      </p>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+        <p style={{ fontSize: 12, color: "var(--text-muted)" }}>
+          Cada alimento indica su fuente (SARA 2 / USDA / LATINFOODS). Día de referencia — en el
+          MVP completo se repite por cada día de la semana.
+        </p>
+        <a href={`/patients/${patientId}/plan-pdf`} target="_blank" rel="noreferrer">
+          <button>Ver / generar PDF</button>
+        </a>
+      </div>
 
       {meals.map((m) => {
         const mealItems = items.filter((it) => it.meal_plan_meal_id === m.id);

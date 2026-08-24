@@ -4,20 +4,30 @@ Esta es la demo funcional del **MVP 1** definido en el Sprint 0: login, paciente
 paciente, y antropometría con cálculo automático de IMC guardado en base de datos real.
 No usa Hostinger ni Laravel todavía — eso, según el propio plan, es la última etapa.
 
-## Qué incluye
+## Qué incluye (Sprint 2)
 
 - **Login real** con Supabase Auth (email + contraseña).
-- **Dashboard** con conteo de pacientes y próximos turnos.
-- **Pacientes**: listado + ficha individual.
-- **Antropometría**: carga peso/talla, calcula IMC en el momento (fórmula citada: Quetelet, 1832),
-  y guarda el registro + el cálculo como filas separadas (medición vs. cálculo, tal como pide el
-  Master Planner).
-- **Audit log automático**: cada vez que se abre la ficha de un paciente, queda un registro `VIEW`
-  en `audit_log` (Ley 26.529 / 25.326).
-- Esquema completo (`supabase/schema.sql`) con **todas** las tablas del modelo de datos del Sprint 0
-  (historia clínica, laboratorios, bioimpedancia, DEXA, base de alimentos con trazabilidad de
-  fuente, plan alimentario, agenda, seguimiento) — aunque el frontend de esta demo todavía solo
-  usa una parte. Así se ve de entrada la dimensión completa del proyecto en la base de datos.
+- **Dashboard** con contadores reales: pacientes, planes en borrador, laboratorios sin validar,
+  antropometrías sin cerrar.
+- **Pacientes**: listado, alta de paciente nuevo, ficha individual con pestañas.
+- **Agenda**: alta de turnos (paciente, tipo, modalidad, estado).
+- **Historia clínica**: timeline append-only real — cada nota es una fila nueva, nunca se
+  sobrescribe (Ley 26.529).
+- **Anamnesis** por secciones configurables.
+- **Antropometría** con formulario + historial completo, IMC calculado y citado (Quetelet, 1832).
+- **Bioimpedancia**: carga de InBody/SECA, separando dato crudo de interpretación.
+- **Laboratorios**: carga manual de analitos con unidad, rango de referencia y fecha.
+- **Plan alimentario**: constructor real contra la base de alimentos (SARA 2 / USDA / LATINFOODS),
+  con cálculo de kcal/macros en vivo, guardado en Supabase.
+- **PDF del plan**: vista imprimible dedicada (`/patients/[id]/plan-pdf`) con botón "Imprimir /
+  guardar como PDF" (usa el diálogo de impresión del navegador — sin dependencias extra).
+- **Evolución**: registro de peso/cintura con mini-gráfico.
+- **Documentos**: registro de metadata (tipo, origen, fecha) — la extracción real por IA es MVP3.
+- **Auditoría global**: todos los eventos `VIEW`/`CREATE`/etc. en un solo lugar.
+- **RLS por rol**: `supabase/rls_hardening.sql` separa qué puede ver `recepcion` (pacientes,
+  agenda) de qué puede ver `admin`/`nutricionista` (historia clínica, laboratorios, antropometría,
+  bioimpedancia, DEXA, documentos, planes).
+- Esquema completo (`supabase/schema.sql`) con todas las tablas del modelo de datos del Sprint 0.
 
 ## Paso a paso — Supabase
 
@@ -28,7 +38,10 @@ No usa Hostinger ni Laravel todavía — eso, según el propio plan, es la últi
 4. Abrir `supabase/seed.sql`, reemplazar `<ADMIN_USER_ID>` por ese UUID, y ejecutarlo en el SQL
    Editor (crea el perfil admin, fuentes de alimentos SARA 2/USDA/LATINFOODS, alimentos de
    ejemplo y 4 pacientes de prueba).
-5. En **Project Settings → API**, copiar `Project URL` y `anon public key`.
+5. Correr `supabase/seed_v2.sql` (alimentos adicionales + turnos de ejemplo para hoy).
+6. Opcional pero recomendado antes de mostrarle esto a un tercero: correr
+   `supabase/rls_hardening.sql` para separar permisos por rol.
+7. En **Project Settings → API**, copiar `Project URL` y `anon public key`.
 
 ## Paso a paso — local
 

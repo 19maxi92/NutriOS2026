@@ -4,6 +4,8 @@ import { useState } from "react";
 import HistoriaTab from "./HistoriaTab";
 import AnamnesisTab from "./AnamnesisTab";
 import AntropometriaTab from "./AntropometriaTab";
+import BioimpedanciaTab from "./BioimpedanciaTab";
+import LaboratoriosTab from "./LaboratoriosTab";
 import PlanTab from "./PlanTab";
 import EvolucionTab from "./EvolucionTab";
 import DocumentosTab from "./DocumentosTab";
@@ -12,6 +14,8 @@ const TABS = [
   { key: "historia", label: "Historia clínica" },
   { key: "anamnesis", label: "Anamnesis" },
   { key: "antropometria", label: "Antropometría" },
+  { key: "bioimpedancia", label: "Bioimpedancia" },
+  { key: "laboratorios", label: "Laboratorios" },
   { key: "plan", label: "Plan alimentario" },
   { key: "evolucion", label: "Evolución" },
   { key: "documentos", label: "Documentos" },
@@ -63,6 +67,8 @@ export default function PatientTabs({
       {tab === "antropometria" && (
         <AntropometriaTab patientId={patientId} initial={initialAnthro} />
       )}
+      {tab === "bioimpedancia" && <BioimpedanciaTab patientId={patientId} />}
+      {tab === "laboratorios" && <LaboratoriosTab patientId={patientId} />}
       {tab === "plan" && <PlanTab patientId={patientId} />}
       {tab === "evolucion" && <EvolucionTab patientId={patientId} />}
       {tab === "documentos" && <DocumentosTab patientId={patientId} />}
