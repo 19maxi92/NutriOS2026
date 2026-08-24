@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import PatientTabs from "./PatientTabs";
+import EditPatientForm from "./EditPatientForm";
 
 export default async function PatientDetailPage({ params }: { params: { id: string } }) {
   const supabase = createClient();
@@ -34,13 +35,20 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
 
   return (
     <div>
-      <h1 style={{ fontSize: 16, fontWeight: 500, marginBottom: 4 }}>
-        {patient.first_name} {patient.last_name}
-      </h1>
-      <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 18 }}>
-        DNI {patient.dni ?? "—"} · Obra social: {patient.health_insurance ?? "—"} · Tel:{" "}
-        {patient.phone ?? "—"}
-      </p>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div>
+          <h1 style={{ fontSize: 16, fontWeight: 500, marginBottom: 4 }}>
+            {patient.first_name} {patient.last_name}
+          </h1>
+          <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 10 }}>
+            DNI {patient.dni ?? "—"} · Obra social: {patient.health_insurance ?? "—"} · Tel:{" "}
+            {patient.phone ?? "—"}
+          </p>
+        </div>
+        <EditPatientForm patient={patient} />
+      </div>
+
+      <div style={{ marginBottom: 8 }} />
 
       <PatientTabs
         patientId={patient.id}

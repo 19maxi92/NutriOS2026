@@ -1,14 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import NewAppointmentForm from "./NewAppointmentForm";
-
-const STATUS_LABEL: Record<string, string> = {
-  solicitado: "Solicitado",
-  confirmado: "Confirmado",
-  asistio: "Asistió",
-  cancelado: "Cancelado",
-  ausente: "Ausente",
-  reprogramado: "Reprogramado",
-};
+import AppointmentRow from "./AppointmentRow";
 
 export default async function AppointmentsPage() {
   const supabase = createClient();
@@ -37,23 +29,7 @@ export default async function AppointmentsPage() {
       )}
 
       {appointments?.map((a: any) => (
-        <div
-          key={a.id}
-          className="card"
-          style={{ marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}
-        >
-          <div>
-            <p style={{ margin: 0, fontSize: 13 }}>
-              {a.patients?.first_name} {a.patients?.last_name}
-            </p>
-            <p style={{ margin: "2px 0 0", fontSize: 12, color: "var(--text-muted)" }}>
-              {new Date(a.starts_at).toLocaleString("es-AR")} · {a.type} · {a.modality}
-            </p>
-          </div>
-          <span className={a.status === "cancelado" || a.status === "ausente" ? "badge warn" : "badge ok"}>
-            {STATUS_LABEL[a.status] ?? a.status}
-          </span>
-        </div>
+        <AppointmentRow key={a.id} appointment={a} />
       ))}
     </div>
   );

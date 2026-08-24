@@ -5,8 +5,10 @@ import HistoriaTab from "./HistoriaTab";
 import AnamnesisTab from "./AnamnesisTab";
 import AntropometriaTab from "./AntropometriaTab";
 import BioimpedanciaTab from "./BioimpedanciaTab";
+import DexaTab from "./DexaTab";
 import LaboratoriosTab from "./LaboratoriosTab";
 import PlanTab from "./PlanTab";
+import RegistroAlimentarioTab from "./RegistroAlimentarioTab";
 import EvolucionTab from "./EvolucionTab";
 import DocumentosTab from "./DocumentosTab";
 
@@ -15,8 +17,10 @@ const TABS = [
   { key: "anamnesis", label: "Anamnesis" },
   { key: "antropometria", label: "Antropometría" },
   { key: "bioimpedancia", label: "Bioimpedancia" },
+  { key: "dexa", label: "DEXA" },
   { key: "laboratorios", label: "Laboratorios" },
   { key: "plan", label: "Plan alimentario" },
+  { key: "registro", label: "Registro alimentario" },
   { key: "evolucion", label: "Evolución" },
   { key: "documentos", label: "Documentos" },
 ] as const;
@@ -68,8 +72,10 @@ export default function PatientTabs({
         <AntropometriaTab patientId={patientId} initial={initialAnthro} />
       )}
       {tab === "bioimpedancia" && <BioimpedanciaTab patientId={patientId} />}
+      {tab === "dexa" && <DexaTab patientId={patientId} />}
       {tab === "laboratorios" && <LaboratoriosTab patientId={patientId} />}
       {tab === "plan" && <PlanTab patientId={patientId} />}
+      {tab === "registro" && <RegistroAlimentarioTab patientId={patientId} />}
       {tab === "evolucion" && <EvolucionTab patientId={patientId} />}
       {tab === "documentos" && <DocumentosTab patientId={patientId} />}
     </div>

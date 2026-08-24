@@ -9,6 +9,8 @@ const MEAL_LABELS: Record<string, string> = {
   cena: "Cena",
 };
 
+const DAY_LABELS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+
 export default async function PlanPdfPage({ params }: { params: { id: string } }) {
   const supabase = createClient();
 
@@ -31,21 +33,24 @@ export default async function PlanPdfPage({ params }: { params: { id: string } }
 
   const { data: days } = await supabase
     .from("meal_plan_days")
-    .select("id")
-    .eq("meal_plan_id", plan.id);
+    .select("id, day_of_week")
+    .eq("meal_plan_id", plan.id)
+    .order("day_of_week");
 
   const dayIds = (days ?? []).map((d) => d.id);
 
   const { data: meals } = await supabase
     .from("meal_plan_meals")
-    .select("id, meal_type")
+    .select("id, meal_type, meal_plan_day_id")
     .in("meal_plan_day_id", dayIds.length ? dayIds : ["00000000-0000-0000-0000-000000000000"]);
 
   const mealIds = (meals ?? []).map((m) => m.id);
 
   const { data: items } = await supabase
     .from("meal_plan_items")
-    .select("meal_plan_meal_id, quantity, unit, foods(name, food_sources(name))")
+    .select(
+      "meal_plan_meal_id, quantity, unit, foods(name, food_sources(name)), recipes(name)"
+    )
     .in("meal_plan_meal_id", mealIds.length ? mealIds : ["00000000-0000-0000-0000-000000000000"]);
 
   return (
@@ -54,6 +59,7 @@ export default async function PlanPdfPage({ params }: { params: { id: string } }
         @media print {
           .no-print { display: none; }
           body { background: white; }
+          .day-block { page-break-inside: avoid; }
         }
       `}</style>
 
@@ -67,24 +73,35 @@ export default async function PlanPdfPage({ params }: { params: { id: string } }
         {plan.start_date}
       </p>
 
-      {(meals ?? []).map((m) => {
-        const mealItems = (items ?? []).filter((it: any) => it.meal_plan_meal_id === m.id);
+      {(days ?? []).map((d) => {
+        const dayMeals = (meals ?? []).filter((m) => m.meal_plan_day_id === d.id);
         return (
-          <div key={m.id} style={{ marginBottom: 16 }}>
-            <h2 style={{ fontSize: 14, borderBottom: "1px solid #ddd", paddingBottom: 4 }}>
-              {MEAL_LABELS[m.meal_type] ?? m.meal_type}
+          <div key={d.id} className="day-block" style={{ marginBottom: 24 }}>
+            <h2 style={{ fontSize: 16, borderBottom: "2px solid #333", paddingBottom: 4 }}>
+              {DAY_LABELS[d.day_of_week]}
             </h2>
-            {!mealItems.length && (
-              <p style={{ fontSize: 12, color: "#999" }}>Sin alimentos cargados.</p>
-            )}
-            <ul style={{ fontSize: 13, paddingLeft: 18 }}>
-              {mealItems.map((it: any, i: number) => (
-                <li key={i}>
-                  {it.foods?.name} — {it.quantity} {it.unit}{" "}
-                  <span style={{ color: "#999" }}>({it.foods?.food_sources?.name})</span>
-                </li>
-              ))}
-            </ul>
+            {dayMeals.map((m) => {
+              const mealItems = (items ?? []).filter((it: any) => it.meal_plan_meal_id === m.id);
+              return (
+                <div key={m.id} style={{ marginBottom: 10 }}>
+                  <h3 style={{ fontSize: 13, margin: "8px 0 2px", color: "#333" }}>
+                    {MEAL_LABELS[m.meal_type] ?? m.meal_type}
+                  </h3>
+                  {!mealItems.length && (
+                    <p style={{ fontSize: 12, color: "#999" }}>Sin alimentos cargados.</p>
+                  )}
+                  <ul style={{ fontSize: 13, paddingLeft: 18, margin: 0 }}>
+                    {mealItems.map((it: any, i: number) => (
+                      <li key={i}>
+                        {it.foods
+                          ? `${it.foods.name} — ${it.quantity} ${it.unit} (${it.foods.food_sources?.name})`
+                          : `${it.recipes?.name} — ${it.quantity} ${it.unit}`}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
           </div>
         );
       })}
