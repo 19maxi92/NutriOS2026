@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import Sidebar from "./_components/Sidebar";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = createClient();
@@ -17,73 +18,47 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .single();
 
   return (
-    <div style={{ maxWidth: 1000, margin: "0 auto", padding: "20px 16px" }}>
+    <div style={{ maxWidth: 1040, margin: "0 auto", padding: "20px 20px 60px" }}>
       <div
         style={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          paddingBottom: 12,
-          marginBottom: 16,
+          paddingBottom: 14,
+          marginBottom: 20,
           borderBottom: "1px solid var(--border)",
         }}
       >
-        <Link href="/dashboard" style={{ color: "var(--text)" }}>
-          <strong>Consultorio Nutricional</strong>
+        <Link href="/dashboard" style={{ color: "var(--text)", display: "flex", alignItems: "center", gap: 8 }}>
+          <span
+            style={{
+              width: 26,
+              height: 26,
+              borderRadius: 7,
+              background: "var(--accent)",
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 600,
+              fontSize: 13,
+            }}
+          >
+            N
+          </span>
+          <strong style={{ fontSize: 14 }}>Consultorio Nutricional</strong>
         </Link>
-        <span style={{ fontSize: 13, color: "var(--text-muted)" }}>
+        <span
+          className="badge accent"
+          style={{ fontSize: 12, padding: "4px 10px" }}
+        >
           {profile?.full_name ?? user.email} · {profile?.role ?? "usuario"}
         </span>
       </div>
-      <div style={{ display: "flex", gap: 20 }}>
-        <nav style={{ width: 168, flexShrink: 0 }}>
-          <NavLink href="/dashboard" label="Dashboard" />
-          <NavLink href="/patients" label="Pacientes" />
-          <NavLink href="/appointments" label="Agenda" />
-          <NavLink href="/foods" label="Alimentos" />
-          <NavLink href="/audit" label="Auditoría" />
-          <NavLink href="/settings" label="Configuración" />
-
-          <p
-            style={{
-              fontSize: 11,
-              color: "var(--text-muted)",
-              textTransform: "uppercase",
-              letterSpacing: 0.4,
-              margin: "16px 0 4px 10px",
-            }}
-          >
-            En construcción
-          </p>
-          <NavLink href="/ai-assistant" label="Asistente IA" />
-          <NavLink href="/photos" label="Análisis de fotos" />
-          <NavLink href="/templates" label="Plantillas" />
-          <NavLink href="/reports" label="Informes" />
-          <NavLink href="/patient-portal" label="Portal paciente" />
-          <NavLink href="/events" label="Eventos" />
-          <NavLink href="/messages" label="Comunicación" />
-          <NavLink href="/security" label="Seguridad avanzada" />
-        </nav>
+      <div style={{ display: "flex", gap: 24 }}>
+        <Sidebar />
         <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
       </div>
     </div>
-  );
-}
-
-function NavLink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      style={{
-        display: "block",
-        padding: "8px 10px",
-        borderRadius: 8,
-        color: "var(--text)",
-        fontSize: 13,
-        marginBottom: 2,
-      }}
-    >
-      {label}
-    </Link>
   );
 }

@@ -36,19 +36,24 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div>
-          <h1 style={{ fontSize: 16, fontWeight: 500, marginBottom: 4 }}>
-            {patient.first_name} {patient.last_name}
-          </h1>
-          <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 10 }}>
-            DNI {patient.dni ?? "—"} · Obra social: {patient.health_insurance ?? "—"} · Tel:{" "}
-            {patient.phone ?? "—"}
-          </p>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span className="avatar" style={{ width: 46, height: 46, fontSize: 16 }}>
+            {(patient.first_name?.[0] ?? "") + (patient.last_name?.[0] ?? "")}
+          </span>
+          <div>
+            <h1 style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>
+              {patient.first_name} {patient.last_name}
+            </h1>
+            <p style={{ fontSize: 13, color: "var(--text-muted)", margin: "2px 0 0" }}>
+              DNI {patient.dni ?? "—"} · Obra social: {patient.health_insurance ?? "—"} · Tel:{" "}
+              {patient.phone ?? "—"}
+            </p>
+          </div>
         </div>
         <EditPatientForm patient={patient} />
       </div>
 
-      <div style={{ marginBottom: 8 }} />
+      <div style={{ marginBottom: 16 }} />
 
       <PatientTabs
         patientId={patient.id}

@@ -41,21 +41,19 @@ export default async function DashboardPage() {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(4, minmax(0,1fr))",
-          gap: 10,
-          marginBottom: 20,
+          gap: 12,
+          marginBottom: 24,
         }}
       >
         {stats.map(([label, value]) => (
-          <div className="card" key={label as string}>
-            <p style={{ fontSize: 12, color: "var(--text-muted)", margin: "0 0 6px" }}>
-              {label}
-            </p>
-            <p style={{ fontSize: 24, fontWeight: 500, margin: 0 }}>{value}</p>
+          <div className="metric-card" key={label as string}>
+            <p className="label">{label}</p>
+            <p className="value">{value}</p>
           </div>
         ))}
       </div>
 
-      <h2 style={{ fontSize: 15, fontWeight: 500, marginBottom: 8 }}>Próximos turnos</h2>
+      <h2 style={{ fontSize: 15, fontWeight: 600, marginBottom: 10 }}>Próximos turnos</h2>
       {!appointments?.length && (
         <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
           Todavía no cargaste turnos. Creá uno desde la sección Agenda.
@@ -65,12 +63,17 @@ export default async function DashboardPage() {
         <div
           key={a.id}
           className="card"
-          style={{ marginBottom: 8, display: "flex", justifyContent: "space-between" }}
+          style={{ marginBottom: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}
         >
-          <span>
-            {a.patients?.first_name} {a.patients?.last_name}
-          </span>
-          <span style={{ color: "var(--text-muted)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span className="avatar">
+              {(a.patients?.first_name?.[0] ?? "") + (a.patients?.last_name?.[0] ?? "")}
+            </span>
+            <span>
+              {a.patients?.first_name} {a.patients?.last_name}
+            </span>
+          </div>
+          <span style={{ color: "var(--text-muted)", fontSize: 13 }}>
             {new Date(a.starts_at).toLocaleString("es-AR")}
           </span>
         </div>
