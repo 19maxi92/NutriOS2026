@@ -1,0 +1,61 @@
+import { createClient } from "@/lib/supabase/server";
+import AnthropometryForm from "./AnthropometryForm";
+
+export default async function PatientDetailPage({ params }: { params: { id: string } }) {
+  const supabase = createClient();
+
+  const { data: patient } = await supabase
+    .from("patients")
+    .select("*")
+    .eq("id", params.id)
+    .single();
+
+  const { data: anthro } = await supabase
+    .from("anthropometry_records")
+    .select("id, measured_at, raw_measurements_json")
+    .eq("patient_id", params.id)
+    .order("measured_at", { ascending: false })
+    .limit(1);
+
+  if (!patient) {
+    return <p>Paciente no encontrado.</p>;
+  }
+
+  // Registrar el acceso en el audit log — Ley 26.529 / 25.326
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  await supabase.from("audit_log").insert({
+    actor_id: user?.id,
+    action: "VIEW",
+    entity_type: "patient",
+    entity_id: patient.id,
+  });
+
+  return (
+    <div>
+      <h1 style={{ fontSize: 16, fontWeight: 500, marginBottom: 4 }}>
+        {patient.first_name} {patient.last_name}
+      </h1>
+      <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 16 }}>
+        DNI {patient.dni} · Obra social: {patient.health_insurance ?? "—"}
+      </p>
+
+      <div className="card" style={{ marginBottom: 16 }}>
+        <h2 style={{ fontSize: 14, fontWeight: 500, marginBottom: 10 }}>Antropometría</h2>
+        <AnthropometryForm
+          patientId={patient.id}
+          initial={anthro?.[0]?.raw_measurements_json ?? { weight: 70, height: 170 }}
+        />
+      </div>
+
+      <div className="card">
+        <h2 style={{ fontSize: 14, fontWeight: 500, marginBottom: 6 }}>Historia clínica</h2>
+        <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
+          Módulo de anamnesis, plan alimentario y seguimiento: siguiente iteración del
+          MVP 1, según el modelo de datos de <code>supabase/schema.sql</code>.
+        </p>
+      </div>
+    </div>
+  );
+}
