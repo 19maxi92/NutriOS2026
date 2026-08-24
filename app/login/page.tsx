@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 
 export default function LoginPage() {
@@ -33,7 +34,10 @@ export default function LoginPage() {
   return (
     <div style={{ maxWidth: 360, margin: "10vh auto", padding: "0 16px" }}>
       <div className="card">
-        <h1 style={{ fontSize: 18, fontWeight: 500, marginBottom: 4 }}>
+        <Link href="/" style={{ fontSize: 12, color: "var(--text-muted)" }}>
+          ← Volver al inicio
+        </Link>
+        <h1 style={{ fontSize: 18, fontWeight: 500, margin: "10px 0 4px" }}>
           Consultorio Nutricional
         </h1>
         <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 20 }}>
