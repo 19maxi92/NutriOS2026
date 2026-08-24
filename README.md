@@ -66,3 +66,5 @@ Abrir `http://localhost:3000/login` y entrar con el usuario admin creado en el p
 Esto es una demo para dimensionar el proyecto, **no** un sistema listo para manejar historias
 clínicas reales de pacientes. Antes de eso: revisión legal profesional (Ley 26.529 / 25.326),
 RLS endurecida, backups, y todo lo que ya señala la sección 33 del Master Planner (seguridad).
+
+
