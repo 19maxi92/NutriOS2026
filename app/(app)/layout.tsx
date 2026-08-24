@@ -37,6 +37,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         <nav style={{ width: 160, flexShrink: 0 }}>
           <NavLink href="/dashboard" label="Dashboard" />
           <NavLink href="/patients" label="Pacientes" />
+          <NavLink href="/appointments" label="Agenda" />
+          <NavLink href="/audit" label="Auditoría" />
         </nav>
         <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
       </div>

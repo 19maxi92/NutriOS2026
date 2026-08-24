@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
+import NewPatientForm from "./NewPatientForm";
 
 export default async function PatientsPage() {
   const supabase = createClient();
@@ -10,8 +11,9 @@ export default async function PatientsPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
-        <h1 style={{ fontSize: 16, fontWeight: 500 }}>Pacientes</h1>
+      <h1 style={{ fontSize: 16, fontWeight: 500, marginBottom: 12 }}>Pacientes</h1>
+      <div style={{ marginBottom: 12 }}>
+        <NewPatientForm />
       </div>
       {!patients?.length && (
         <p style={{ fontSize: 13, color: "var(--text-muted)" }}>

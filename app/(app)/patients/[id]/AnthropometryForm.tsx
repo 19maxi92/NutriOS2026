@@ -6,9 +6,11 @@ import { createClient } from "@/lib/supabase/client";
 export default function AnthropometryForm({
   patientId,
   initial,
+  onSaved,
 }: {
   patientId: string;
   initial: { weight: number; height: number };
+  onSaved?: () => void;
 }) {
   const [weight, setWeight] = useState(initial.weight);
   const [height, setHeight] = useState(initial.height);
@@ -55,6 +57,7 @@ export default function AnthropometryForm({
 
     setSaving(false);
     setSaved(true);
+    onSaved?.();
   };
 
   return (

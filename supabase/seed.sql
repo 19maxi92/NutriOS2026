@@ -7,7 +7,7 @@
 
 -- 1) Perfil del usuario admin (el usuario ya debe existir en auth.users)
 insert into public.profiles (id, full_name, role, license_number)
-values ('<1bbc729b-5fa0-4e80-a26f-caebbeca9245>', 'Lic. Demo', 'admin', 'MN-00000')
+values ('<ADMIN_USER_ID>', 'Lic. Demo', 'admin', 'MN-00000')
 on conflict (id) do nothing;
 
 -- 2) Fuentes de composición de alimentos
